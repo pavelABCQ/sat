@@ -1,8 +1,12 @@
 from app import db
+import dns.resolver
+
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+from hashlib import*
+
 
 
 class User(UserMixin, db.Model):
@@ -12,6 +16,22 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     
+
+    def avatar(self, size):
+        email = self.email.lower()
+        print(email)
+        domain = email.split('@')[1]
+
+        try:
+            answers = dns.resolver.query('_avatars._tcp.' + domain, 'SRV')
+            baseurl = 'http://' + str(answers[0].target) + '/avatar/'
+        except:
+            baseurl = http://cdn.libravatar.org/avatar/
+        hash = md5((email.strip().lower()).encode('utf-8')).hexdigest()
+#digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return baseurl+hash+'2$='+size
+
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

@@ -1,11 +1,19 @@
 ﻿{% extends "layout.html" %}
-
+<table>
+    <tr valign="top">
+        <td><img src="{{ user.avatar(128) }}"></td>
+        <td><h1>User: {{ user.username }}</h1></td>
+    </tr>
+</table>
 {% block content %}
 <h1>User: {{ user.username }}</h1>
 <hr>
     {% for post in posts %}
-<p>
-   <font color="green" size="55" face="algerian"  {{ post.author.username }} says: <b>{{ post.body }}</b>
-</p>
+<table>
+    <tr valign="top">
+        <td><img src="{{ post.author.avatar(36) }}"></td>
+        <td>{{ post.author.username }} says:<br>{{ post.body }}</td>
+    </tr>
+</table>
     {% endfor %}
 {% endblock %}
